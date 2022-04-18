@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+      integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+      integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+      crossorigin="anonymous"
+    ></script>
+    <title>EB Bill Calculator</title>
+  </head>
+  <body>
+    <div
+      class="card p-5"
+      style="margin: 50px 12%; background-color: rgb(236, 194, 218)"
+    >
+      <div class="card-body">
+        <form action="" method="get">
+          <h3 style="text-align: center">EB BILL CALCULATOR</h3>
+          <br />
+          <div class="container">
+            <div class="row">
+              <div class="col-6 my-3" style="text-align: center">
+                <label for="tariff" class="form-label"
+                  ><b> TARIFF CHECK </b>
+                </label>
+              </div>
+              <div class="col-6 my-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="tariff"
+                  name="tariff"
+                  value="DOMESTIC"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6 my-3" style="text-align: center">
+                <label for="billing" class="form-label"
+                  ><b> BILLING CYCLE</b></label
+                >
+              </div>
+              <div class="col-6 my-3">
+                <select name="billing" id="billing" class="form-select">
+                  <option value="Bi-monthly" name="billing" id="billing">
+                    Bi-monthly
+                  </option>
+                  <option value="monthly" name="billing" id="billing">
+                    monthly
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6 my-3" style="text-align: center">
+                <label for="consumedLast" class="form-label"
+                  ><b>UNITS ON LAST PAYMENT</b></label
+                >
+              </div>
+              <div class="col-6 my-3">
+                <input
+                  type="text"
+                  id="consumedLast"
+                  name="consumedLast"
+                  class="form-control"
+                />
+              </div>
+              <div class="col-6 my-3" style="text-align: center">
+                <label for="consumed" class="form-label"
+                  ><b>CONSUMED UNITS</b></label
+                >
+              </div>
+              <div class="col-6 my-3">
+                <input
+                  type="text"
+                  id="consumed"
+                  name="consumed"
+                  class="form-control"
+                />
+              </div>
+              <div class="col-6 my-3" style="text-align: center">
+                <label for="pay" class="form-label"
+                  ><b>PAYMENT BEFORE DUE</b></label
+                >
+              </div>
+              <div class="col-6 my-3">
+                <input
+                  type="radio"
+                  value="Yes"
+                  name="pay"
+                  id="pay"
+                  class="mx-3"
+                />YES
+                <input
+                  type="radio"
+                  value="No"
+                  name="pay"
+                  id="pay"
+                  class="mx-3"
+                />NO
+              </div>
+            </div>
+            <div class="container">
+              <div class="row">
+                <div class="col-5"></div>
+                <div class="col">
+                  <button
+                    type="button"
+                    class="btn btn-success mt-3"
+                    onclick="calculator()"
+                  >
+                    CALCULATE
+                  </button>
+                </div>
+                <div class="col-5"></div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div id="show"></div>
+    <script>
+      function calculator() {
+        var nametariff = document.getElementById("tariff").value;
+        var billing = document.getElementById("billing").value;
+        var consumedLast = document.getElementById("consumedLast").value;
+        var consumedNow = document.getElementById("consumed").value;
+        var paybefore = document.querySelectorAll('input[name="pay"]');
+        var consumed = consumedNow - consumedLast;
+        var pay;
+        var fc;
+        if (consumed < 100) {
+          pay = 0;
+          fc = 0;
+        } else if (consumed < 200) {
+          fc = 20;
+          pay = fc + (consumed - 100) * 1.5;
+        } else if (consumed < 500) {
+          fc = 30;
+          pay = fc + 200 + (consumed - 200) * 3;
+        } else if (consumed < 9999999) {
+          fc = 50;
+          pay = fc + 1730 + (consumed - 500) * 6.6;
+        }
+        for (const pbefore of paybefore) {
+          if (pbefore.checked) {
+            due = pbefore.value;
+            break;
+          }
+        }
+        if (due === "No") {
+          pay = pay + 100;
+        }
+        document.getElementById("show").innerHTML = `   <div
+      class="card p-5"
+      style="margin: 50px 12%; background-color: rgb(212, 233, 236)"
+    >
+      <div class="card-body">
+        <h4 style="text-align: center;">YOUR PAYMENT</h4><br>
+    <table class="table table-striped table-hover">
+    <tr>
+        <td>You have consumed :</td>
+        <td>${consumed}</td>
+    </tr>
+    <tr>
+        <td>Payment Before due :</td>
+        <td>${due}</td>
+    </tr>
+    <tr>
+        <td>Fixed Cost :</td>
+        <td>${fc}</td>
+    </tr>
+    <tr>
+        <td>You have to pay :</td>
+        <td>${pay}</td>
+    </tr>
+</table>
+</div>
+</div>`;
+      }
+    </script>
+  </body>
+</html>
